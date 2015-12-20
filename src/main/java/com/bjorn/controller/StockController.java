@@ -1,6 +1,5 @@
 package com.bjorn.controller;
 
-import com.bjorn.domain.Stock;
 import com.bjorn.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -2,6 +2,7 @@ package com.bjorn.config;
 
 import com.bjorn.message.Receiver;
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
  * Created by Björn on 2015-12-06.
  */
 @Configuration
+@EnableRabbit
 public class MessageConfig {
     private static final String queueName = "/topic/message";
 
@@ -38,6 +40,7 @@ public class MessageConfig {
         container.setConnectionFactory(connectionFactory);
         container.setQueueNames(queueName);
         container.setMessageListener(listenerAdapter);
+        container.setRabbitAdmin(amqpAdmin());
         return container;
     }
 
@@ -51,17 +54,17 @@ public class MessageConfig {
         return new MessageListenerAdapter(receiver, "receiveMessage");
     }
 
-//    @Bean
-//    public ConnectionFactory connectionFactory() {
-//        CachingConnectionFactory connectionFactory =
-//                new CachingConnectionFactory("localhost");
-//        return connectionFactory;
-//    }
-//
-//    @Bean
-//    public AmqpAdmin amqpAdmin() {
-//        return new RabbitAdmin(connectionFactory());
-//    }
+    @Bean
+    public ConnectionFactory connectionFactory() {
+        CachingConnectionFactory connectionFactory =
+                new CachingConnectionFactory("localhost");
+        return connectionFactory;
+    }
+
+    @Bean
+    public RabbitAdmin amqpAdmin() {
+        return new RabbitAdmin(connectionFactory());
+    }
 
 
 }
